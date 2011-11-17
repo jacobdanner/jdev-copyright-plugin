@@ -1,0 +1,37 @@
+<extension id="com.ph477y.jdev" version="1.0.0" esdk-version="1.0" rsbundle-class="com.ph477y.jdev.Res"
+           xmlns="http://jcp.org/jsr/198/extension-manifest">
+  <name>${EXTENSION_NAME}</name>
+  <owner>${EXTENSION_OWNER}</owner>
+  <trigger-hooks xmlns="http://xmlns.oracle.com/ide/extension">
+    <!-- TODO Declare triggering functionality provided by extension: com.ph477y.jdev -->
+    <triggers>
+      <actions xmlns="http://xmlns.oracle.com/jdeveloper/1013/extension">
+        <action id="insertcopyrightaction_id">
+          <properties>
+            <property name="Name">com.ph477y.jdev.copyright.InsertCopyrightAction</property>
+            <property name="SmallIcon">${OracleIcons.NAVIGATOR}</property>
+            <property name="LongDescription">Inserts Copyright into file</property>
+          </properties>
+        </action>
+      </actions>
+      <controllers>
+        <controller class="com.ph477y.jdev.copyright.InsertCopyrightActionController">
+          <update-rules>
+            <update-rule rule="always-enabled">
+              <action id="insertcopyrightaction_id"/>
+            </update-rule>
+          </update-rules>
+        </controller>
+      </controllers>
+      <settings-ui-hook>
+        <page id="copyrightPanel" parent-idref="/preferences">
+          <label>Copyright</label>
+          <traversable-class>com.ph477y.jdev.copyright.prop.CopyrightPanel</traversable-class>
+        </page>
+      </settings-ui-hook>
+    </triggers>
+  </trigger-hooks>
+  <hooks>
+    <!-- TODO Declare functionality provided by extension: com.ph477y.jdev -->
+  </hooks>
+</extension>
