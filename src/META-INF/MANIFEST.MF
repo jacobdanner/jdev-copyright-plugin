@@ -1,6 +1,2 @@
 Manifest-Version: 1.0
-Bundle-ManifestVersion: 2.0
-Bundle-Version: 1.0.0
-Bundle-SymbolicName: com.ph477y.jdev
 Bundle-ClassPath: .
-Require-Bundle: oracle.ide

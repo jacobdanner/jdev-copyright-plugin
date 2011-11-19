@@ -8,21 +8,19 @@ import oracle.ide.panels.DefaultTraversablePanel;
 import oracle.ide.panels.TraversableContext;
 import oracle.ide.util.ResourceUtils;
 import oracle.ide.webbrowser.URLHyperlinkButton;
-import oracle.javatools.controls.HyperlinkButton;
 
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+
 import java.net.URL;
 
 /**
  * Copyright preference page implementation.
  */
-@RegisteredByExtension("com.ph477y.jdev")
+@RegisteredByExtension("com.ph477y.jdev.copyright")
 final class CopyrightPanel
   extends DefaultTraversablePanel implements ApplyListener
 {
@@ -80,7 +78,7 @@ final class CopyrightPanel
     licenseGbc.gridx = 0;
     licenseGbc.gridy = 2;
     licenseGbc.gridwidth = GridBagConstraints.REMAINDER;
-    add(findLicenseBtn, BorderLayout.PAGE_END);
+    add(findLicenseBtn, licenseGbc);
   }
 
   /**
@@ -98,7 +96,6 @@ final class CopyrightPanel
   {
     final CopyrightInfo info = CopyrightInfo.getInstance(Preferences.getPreferences());
     copyrightTxt.setText(info.getCopyright());
-
   }
 
   public void onExit(TraversableContext context)
@@ -112,9 +109,6 @@ final class CopyrightPanel
   {
     final TraversableContext tc = (TraversableContext) event.getSource();
     final CopyrightInfo options = findCopyrightInfo(tc);
-
-    // Apply the options globally
-    //applyOptions(options);
   }
 
   public void cancel(ApplyEvent applyEvent)

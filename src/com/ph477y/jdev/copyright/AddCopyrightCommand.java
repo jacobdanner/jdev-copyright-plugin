@@ -27,4 +27,5 @@ public class AddCopyrightCommand
   {
     return 0;
   }
+  
 }

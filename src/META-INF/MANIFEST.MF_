@@ -1,0 +1,17 @@
+#Manifest-Version: 1.0
+#Bundle-ManifestVersion: 2.0
+#Bundle-Version: 1.0.0
+#Bundle-Name: com.ph477y.jdev.copyright
+#Bundle-SymbolicName: com.ph477y.jdev.copyright
+#Bundle-ClassPath: .
+#Require-Bundle: oracle.ide,oracle.ide.ceditor,
+# oracle.ide.ceditor-template,oracle.ide.file,oracle.ide.files,
+# oracle.ide.log,oracle.ide.vcscore,oracle.ide.vfs,oracle.ide.vhv,
+# oracle.jdeveloper,oracle.jdeveloper.ceditor-template-java,
+# oracle.jdeveloper.common,oracle.jdeveloper.vcs,
+# oracle.jdeveloper.xml,oracle.jdeveloper.xmlef,oracle.vcs-extended,
+# oracle.ide.webbrowser,oracle.icons,oracle.idert,
+# oracle.java-annotations,oracle.javamodel-rt,oracle.javatools,
+# oracle.javatools-nodeps,oracle.javaxide,oracle.jewt-core,
+# oracle.uic,oracle.uieditor-proxy,oracle.xmlef,oracle.xmlef-core,
+# oracle.xmlef-swing

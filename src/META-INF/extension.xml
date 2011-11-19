@@ -1,37 +1,102 @@
-<extension id="com.ph477y.jdev" version="1.0.0" esdk-version="1.0" rsbundle-class="com.ph477y.jdev.Res"
+<extension id="com.ph477y.jdev.copyright" version="1.0.0" esdk-version="1.0" rsbundle-class="com.ph477y.jdev.Res"
            xmlns="http://jcp.org/jsr/198/extension-manifest">
   <name>${EXTENSION_NAME}</name>
   <owner>${EXTENSION_OWNER}</owner>
+  <dependencies>
+    <import>oracle.ide</import>
+    <import>oracle.ide.ceditor</import>
+    <import>oracle.ide.ceditor-template</import>
+    <import>oracle.ide.file</import>
+    <import>oracle.ide.files</import>
+    <import>oracle.ide.log</import>
+    <import>oracle.ide.vcscore</import>
+    <import>oracle.ide.vfs</import>
+    <import>oracle.ide.vhv</import>
+    <import>oracle.jdeveloper</import>
+    <import>oracle.jdeveloper.ceditor-template-java</import>
+    <import>oracle.jdeveloper.common</import>
+    <import>oracle.jdeveloper.vcs</import>
+    <import>oracle.jdeveloper.xml</import>
+    <import>oracle.jdeveloper.xmlef</import>
+    <import>oracle.vcs-extended</import>
+    <import>oracle.ide.webbrowser</import>
+  </dependencies>
+  <required-bundles>
+    <bundle>oracle.icons</bundle>
+    <bundle>oracle.idert</bundle>
+    <bundle>oracle.java-annotations</bundle>
+    <bundle>oracle.javamodel-rt</bundle>
+    <bundle>oracle.javatools</bundle>
+    <bundle>oracle.javatools-nodeps</bundle>
+    <bundle>oracle.javaxide</bundle>
+    <bundle>oracle.jewt-core</bundle>
+    <bundle>oracle.jgoodies-looks</bundle>
+    <bundle>oracle.uic</bundle>
+    <bundle>oracle.uieditor-proxy</bundle>
+    <bundle>oracle.xmlef</bundle>
+    <bundle>oracle.xmlef-core</bundle>
+    <bundle>oracle.xmlef-swing</bundle>
+  </required-bundles>
   <trigger-hooks xmlns="http://xmlns.oracle.com/ide/extension">
-    <!-- TODO Declare triggering functionality provided by extension: com.ph477y.jdev -->
+    <rules>
+      <rule id="context-has-text-node" type="context-has-node">
+        <parameters>
+          <param name="node-class" value="oracle.ide.model.TextNode"/>
+        </parameters>
+      </rule>
+    </rules>
     <triggers>
-      <actions xmlns="http://xmlns.oracle.com/jdeveloper/1013/extension">
-        <action id="insertcopyrightaction_id">
-          <properties>
-            <property name="Name">com.ph477y.jdev.copyright.InsertCopyrightAction</property>
-            <property name="SmallIcon">${OracleIcons.NAVIGATOR}</property>
-            <property name="LongDescription">Inserts Copyright into file</property>
-          </properties>
-        </action>
-      </actions>
-      <controllers>
+    
+      <controllers xmlns="http://xmlns.oracle.com/ide/extension">
         <controller class="com.ph477y.jdev.copyright.InsertCopyrightActionController">
           <update-rules>
-            <update-rule rule="always-enabled">
-              <action id="insertcopyrightaction_id"/>
+            <update-rule rule="context-has-text-node">
+              <action id="com.ph477y.jdev.InsertCopyrightActionId">
+                <!-- <label>Insert Copyright</label>-->
+              </action>
             </update-rule>
           </update-rules>
         </controller>
       </controllers>
+      <actions xmlns="http://xmlns.oracle.com/jdeveloper/1013/extension">
+        <action id="com.ph477y.jdev.InsertCopyrightActionId">
+          <properties>
+            <property name="Name">Insert Copyright</property>
+            <property name="Category">Other</property>
+            <property name="ShortDescription">Adds Copyright to file</property>
+          </properties>
+        </action>
+        <action id="com.ph477y.jdev.copyright.InsertCopyrightCommand">
+          <properties>
+            <property name="Name">Insert Copyright</property>
+            <property name="LongDescription">Inserts Copyright into beginning of file</property>
+          </properties>
+          <command-class>com.ph477y.jdev.copyright.InsertCopyrightCommand</command-class>
+        </action>
+      </actions>
+      
+      
+      
       <settings-ui-hook>
-        <page id="copyrightPanel" parent-idref="/preferences">
+        <page id="com.ph477y.jdev.copyright.property" parent-idref="/preferences">
           <label>Copyright</label>
           <traversable-class>com.ph477y.jdev.copyright.prop.CopyrightPanel</traversable-class>
+          <tooltip>Configure Copyright Information</tooltip>
         </page>
       </settings-ui-hook>
     </triggers>
   </trigger-hooks>
   <hooks>
+  
     <!-- TODO Declare functionality provided by extension: com.ph477y.jdev -->
+    <jdeveloper-hook xmlns="http://xmlns.oracle.com/jdeveloper/1013/extension">
+      <context-menu-listeners>
+        <site idref="navigator,editor,explorer">
+          <listener-class>com.ph477y.jdev.copyright.InsertCopyrightContextListener</listener-class>
+        </site>
+      
+      </context-menu-listeners>
+    </jdeveloper-hook>
   </hooks>
 </extension>
+

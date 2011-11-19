@@ -13,8 +13,15 @@
       <string v="oracle.jdeveloper.model.PathsConfiguration/javaContentSet"/>
       <string v="oracle.ide.model.ResourcePaths/resourcesContentSet"/>
       <string v="oracle.abbot/abbotPaths"/>
+      <string v="oracle.mds.internal.dt.ide.MDSLibraryCustCSProvider/mdsContentSet"/>
+      <string v="oracle.mds.internal.dt.ide.MDSADFLibVirtualNodeCSProvider/mdsLibVirtualNodeContentSet"/>
+      <string v="oracle.jdeveloper.model.J2eeSettings/webContentSet"/>
+      <string v="oracle.jdeveloper.offlinedb.model.OfflineDBProjectSettings/offlineDBContentSet"/>
+      <string v="oracle.adfdtinternal.model.ide.settings.ADFMSettings/adfmContentSet"/>
+      <string v="oracle.bm.commonIde.data.project.ModelerProjectSettings/modelersContentSet"/>
+      <string v="oracle.toplink.workbench.addin/toplinkContentSet"/>
    </list>
-   <value n="defaultPackage" v="com.ph477y.jdev"/>
+   <value n="defaultPackage" v="com.ph477y.jdev.copyright"/>
    <hash n="extensiondtProperties">
       <value n="extensiondt.deploymentdir" v="jdev/extensions/"/>
       <url n="extensiondt.manifest" path="src/META-INF/extension.xml"/>
@@ -60,16 +67,18 @@
                   <url path="src/META-INF/MANIFEST.MF"/>
                </list>
                <value n="bundleManifestVersion" v="2.0.0"/>
-               <value n="bundleSymbolicName" v="com.ph477y.jdev"/>
+               <value n="bundleSymbolicName" v="com.ph477y.jdev.copyright"/>
                <value n="bundleVersion" v="1.0.0"/>
                <value n="hasManifest" v="true"/>
             </hash>
             <hash n="exportDefinition">
-               <list n="contributors">
-                  <hash>
-                     <value n="type" v="filegroups"/>
-                  </hash>
-               </list>
+               <hash n="contributors">
+                  <list n="contributors-list">
+                     <hash>
+                        <value n="contributor" v="filegroups"/>
+                     </hash>
+                  </list>
+               </hash>
                <hash n="rules">
                   <list n="rules">
                      <hash>
@@ -84,11 +93,9 @@
                   <hash>
                      <list n="contributors">
                         <hash>
-                           <value n="location"/>
                            <value n="type" v="2"/>
                         </hash>
                         <hash>
-                           <value n="location"/>
                            <value n="type" v="7"/>
                         </hash>
                      </list>
@@ -105,15 +112,20 @@
                   </hash>
                </list>
             </hash>
-            <url n="jarURL" path="../../../../ide/jdeveloper/jdev/extensions/com.ph477y.jdev.jar"/>
+            <url n="jarURL" path="../../../../Oracle/Middleware/jdeveloper/jdev/extensions/com.ph477y.jdev.copyright.jar"/>
+            <hash n="libraryDependencies">
+               <value n="IncludeLibrariesFromOtherContainers" v="true"/>
+            </hash>
             <value n="profileClass" v="oracle.jdevimpl.extensiondt.deploy.ExtensionProfile"/>
             <value n="profileName" v="edtExtensionProfile"/>
             <hash n="requireBundles">
-               <list n="contributors">
-                  <hash>
-                     <value n="type" v="profile-dependencies"/>
-                  </hash>
-               </list>
+               <hash n="contributors">
+                  <list n="contributors-list">
+                     <hash>
+                        <value n="contributor" v="profile-dependencies"/>
+                     </hash>
+                  </list>
+               </hash>
                <hash n="rules">
                   <list n="rules">
                      <hash>
@@ -124,10 +136,78 @@
                </hash>
             </hash>
          </hash>
+         <hash n="Extension_Deployment">
+            <hash n="archiveOptions">
+               <list n="additionalManifests"/>
+               <value n="bundleName" v="com.ph477y.jdev.copyright"/>
+               <value n="bundleSymbolicName" v="com.ph477y.jdev.copyright"/>
+               <value n="bundleVersion" v="1.0.0"/>
+               <value n="hasManifest" v="true"/>
+            </hash>
+            <hash n="exportDefinition">
+               <hash n="contributors"/>
+               <hash n="rules"/>
+            </hash>
+            <hash n="fileGroups">
+               <list n="groups">
+                  <hash>
+                     <list n="contributors">
+                        <hash>
+                           <value n="type" v="2"/>
+                        </hash>
+                        <hash>
+                           <value n="type" v="7"/>
+                        </hash>
+                     </list>
+                     <value n="displayName" v="Project Output"/>
+                     <hash n="filters">
+                        <list n="rules">
+                           <hash>
+                              <value n="DefaultFilters" v=""/>
+                           </hash>
+                        </list>
+                     </hash>
+                     <value n="internalName" v="project-output"/>
+                     <value n="type" v="1"/>
+                  </hash>
+               </list>
+            </hash>
+            <hash n="importDefinition">
+               <hash n="contributors"/>
+               <hash n="rules"/>
+            </hash>
+            <url n="jarURL" path="../../jdeveloper/jdev/extensions/com.ph477y.jdev.copyright.jar"/>
+            <hash n="libraryDependencies">
+               <value n="IncludeLibrariesFromOtherContainers" v="true"/>
+            </hash>
+            <value n="profileClass" v="oracle.jdevimpl.extensiondt.deploy.ExtensionProfile"/>
+            <value n="profileName" v="Extension_Deployment"/>
+            <hash n="requireBundles">
+               <hash n="contributors">
+                  <list n="contributors-list">
+                     <hash>
+                        <value n="contributor" v="library-dependencies"/>
+                     </hash>
+                     <hash>
+                        <value n="contributor" v="profile-dependencies"/>
+                     </hash>
+                  </list>
+               </hash>
+               <hash n="rules"/>
+            </hash>
+         </hash>
       </hash>
       <list n="profileList">
+         <string v="Extension_Deployment"/>
          <string v="edtExtensionProfile"/>
       </list>
+   </hash>
+   <hash n="oracle.jdeveloper.model.J2eeSettings">
+      <hash n="webContentSet">
+         <list n="url-path">
+            <url path="public_html/"/>
+         </list>
+      </hash>
    </hash>
    <hash n="oracle.jdevimpl.config.JProjectLibraries">
       <list n="exportedReferences">
@@ -144,6 +224,6 @@
       </list>
    </hash>
    <hash n="oracle.jdevimpl.config.JProjectPaths">
-      <url n="outputDirectory" path="../../../oracle/built/copyright-plugin/classes/"/>
+      <url n="outputDirectory" path="../built/copyright-plugin/classes/"/>
    </hash>
 </jpr:project>
