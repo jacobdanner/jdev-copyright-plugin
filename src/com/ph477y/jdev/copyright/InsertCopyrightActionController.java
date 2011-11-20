@@ -74,7 +74,7 @@ public final class InsertCopyrightActionController
           // end lock
         }
       }
-      AddCopyrightCommand addCmd = new AddCopyrightCommand(nodes);
+      AddCopyrightCommand addCmd = new AddCopyrightCommand(nodes, context);
       try
       {
         addCmd.doit();

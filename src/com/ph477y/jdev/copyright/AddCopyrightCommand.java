@@ -1,6 +1,7 @@
 package com.ph477y.jdev.copyright;
 
 import com.ph477y.jdev.copyright.prop.CopyrightInfo;
+import oracle.ide.Context;
 import oracle.ide.Ide;
 import oracle.ide.config.FileTypesRecognizer;
 import oracle.ide.config.Preferences;
@@ -12,20 +13,16 @@ import oracle.ide.model.TextNode;
 import oracle.ide.net.URLFileSystem;
 import oracle.ide.net.URLKey;
 import oracle.ide.vcs.VCSManager;
-import oracle.ideimpl.config.FileTypesPrefs;
 import oracle.javatools.buffer.TextBuffer;
 import oracle.javatools.util.Pair;
 import oracle.jdeveloper.vcs.spi.VCSCheckOutNodeCmd;
 import oracle.jdeveloper.audit.transform.TextBufferCommand;
 
-import javax.ide.util.MetaClass;
-import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.logging.Logger;
 
-public class AddCopyrightCommand
-  extends Command
+public class AddCopyrightCommand extends Command
 {
   private final static Logger LOG = Logger.getLogger(AddCopyrightCommand.class.getName());
   final static String INSERT_CMD = "com.ph477y.jdev.copyright.InsertCopyrightCommand";
@@ -39,7 +36,7 @@ public class AddCopyrightCommand
   //private final FileTypesPrefs ftp;
   private FileTypesRecognizer ftp = new FileTypesRecognizer();
 
-  public AddCopyrightCommand(List<TextNode> nodes)
+  public AddCopyrightCommand(List<TextNode> nodes, Context context)
   {
     super(INSERT_CMD_ID, Command.NO_UNDO, INSERT_CMD);
     this.nodes = nodes;
@@ -49,10 +46,12 @@ public class AddCopyrightCommand
     CopyrightInfo copyrightInfo = CopyrightInfo.getInstance(Preferences.getPreferences());
     copyrightTxt = copyrightInfo.getCopyright();
 
-    copyrightRunnable = new InsertCopyrightRunnable(this.nodes);
+    copyrightRunnable = new InsertCopyrightRunnable(this.nodes, copyrightTxt, context);
     progressBar = new ProgressBar(Ide.getMainWindow(),
       "Inserting Copyright", copyrightRunnable, false);//true);
-
+    // this seems quite odd, but is required via
+    // ProgressBar ESDK
+    copyrightRunnable.setProgressBar(progressBar);
 
   }
 
@@ -71,51 +70,34 @@ public class AddCopyrightCommand
     return 0;
   }
 
-  private void updateProgressBarDetails(int status, String progressText, String msg)
-  {
-    if (progressBar.hasUserCancelled() || progressBar.getCompletionStatus() == nodes.size())
-    {
-      progressBar.updateProgress(status, progressText, msg);
-    }
-  }
-
-  private String getCopyrightForInsert(URL nodeUrl)
-  {
-
-    final String ext = URLFileSystem.getSuffix(nodeUrl);
-    String className = FileTypesRecognizer.getClassNameForExtension(ext);
-    LOG.warning("NODETYPE - " + className);
-    //ContentType contentType = FileTypesRecognizer.getContentTypeForExtension(ext);
-    //LOG.warning("CONTENTTYPE - " + contentType);
-
-    //MetaClass<Node> nodeType = FileTypesRecognizer.recognizeURLAsMeta(nodeUrl);
-    StringBuilder builder = new StringBuilder();
-    Pair<String, String> multiLineComment = new Pair<String, String>();
-    if (FileTypesRecognizer.isXmlExtension(ext))
-    {
-      multiLineComment.setFirst("<!--\n");
-      multiLineComment.setSecond("\n-->\n");
-    }
-    else
-    {
-      multiLineComment.setFirst("/**\n");
-      multiLineComment.setSecond("\n*/\n");
-    }
-    builder.append(multiLineComment.getFirst());
-    builder.append(copyrightTxt);
-    builder.append(multiLineComment.getSecond());
-    return builder.toString();
-  }
-
-
-  private class InsertCopyrightRunnable extends VCSCheckOutNodeCmd implements Runnable
+  public class InsertCopyrightRunnable extends VCSCheckOutNodeCmd implements Runnable
   {
     private List<TextNode> nodes;
+    private String copyrightTxt;
+    private Context context;
 
-    public InsertCopyrightRunnable(List<TextNode> nodes)
+    private ProgressBar progressBar;
+
+    public InsertCopyrightRunnable(List<TextNode> nodes, String copyrightTxt, Context context)
     {
       super(Command.NO_UNDO, "Updating Command Command");
       this.nodes = nodes;
+      this.copyrightTxt = copyrightTxt;
+      this.context = context;
+    }
+
+    public void setProgressBar(ProgressBar progressBar)
+    {
+      this.progressBar = progressBar;
+    }
+
+
+    public void logMessage(Integer step, Node node, String msg)
+    {
+      if (progressBar.hasUserCancelled() || progressBar.getCompletionStatus() == nodes.size())
+      {
+        progressBar.updateProgress(step, node.getShortLabel(), msg);
+      }
     }
 
     public void run()
@@ -131,7 +113,9 @@ public class AddCopyrightCommand
           boolean doesCheckout = true; // assume true so we can process the file, unless doCheckout returns false
 
           // Need to figure out the proper way to call these APIs, canCheckoutUI always prompts
-          updateProgressBarDetails(i, "Checking VCS of " + node.getShortLabel(), "Checking VCS of " + node.getShortLabel());
+          // maybe we should try
+          // oracle.jdeveloper.refactoring.util.MakeWritableHelper
+          logMessage(i, node, "Checking VCS of " + node.getShortLabel());
           if (canCheckout)
           {
             try
@@ -145,8 +129,8 @@ public class AddCopyrightCommand
           }
           if (doesCheckout)
           {
-            updateProgressBarDetails(i, "VCS Check complete " + doesCheckout + " " + node.getShortLabel(), "Checking VCS of " + node.getShortLabel());
-            final String toinsertTxt = getCopyrightForInsert(nodeUrl.toURL());
+            logMessage(i, node, "VCS Check complete " + doesCheckout + " " + node.getShortLabel());
+            final String toinsertTxt = getCopyrightForInsert(nodeUrl.toURL(), node);
             try
             {
               int offset = 0; // for most cases, 0 is fine, but if XML starts with <? ... we should go to the next line
@@ -167,7 +151,7 @@ public class AddCopyrightCommand
               insertCommand.doit();
             } catch (Exception ioEx)
             {
-              updateProgressBarDetails(i, "Failed to add copyright", nodeUrl.toString());
+              logMessage(i, node, "Failed to add copyright");
             }
           }
         }
@@ -180,6 +164,43 @@ public class AddCopyrightCommand
       progressBar.setDoneStatus();
       return;
     }
+
+    private String getCopyrightForInsert(URL nodeUrl, TextNode node)
+    {
+
+      final String ext = URLFileSystem.getSuffix(nodeUrl);
+      String className = FileTypesRecognizer.getClassNameForExtension(ext);
+      LOG.warning("NODETYPE - " + className);
+      //ContentType contentType = FileTypesRecognizer.getContentTypeForExtension(ext);
+      //LOG.warning("CONTENTTYPE - " + contentType);
+
+      //MetaClass<Node> nodeType = FileTypesRecognizer.recognizeURLAsMeta(nodeUrl);
+      StringBuilder builder = new StringBuilder();
+      Pair<String, String> multiLineComment = new Pair<String, String>();
+      if (FileTypesRecognizer.isXmlExtension(ext))
+      {
+        multiLineComment.setFirst("<!--\n");
+        multiLineComment.setSecond("\n-->\n");
+      }
+      else
+      {
+        multiLineComment.setFirst("/**\n");
+        multiLineComment.setSecond("\n*/\n");
+      }
+      builder.append(multiLineComment.getFirst());
+      if(context != null)
+      {
+        Context currContext = context;
+        currContext.setNode(node);
+        // String moddedText = new MacroRegistry().expand(copyrightTxt, currContext);
+        builder.append(copyrightTxt);
+      } else {
+        builder.append(copyrightTxt);
+      }
+        builder.append(multiLineComment.getSecond());
+      return builder.toString();
+    }
+
   }
 
 }

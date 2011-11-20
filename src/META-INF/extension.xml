@@ -100,6 +100,13 @@
         </site>
       </context-menu-listeners>
     </jdeveloper-hook>
+    <feature-hook>
+      <description>Inserts user defined copyright/license info to the top of TextNodes</description>
+      <copyright>2011 </copyright>
+      <!--<iconpath></iconpath>-->
+      <license>Apache License</license>
+      <optional>false</optional>
+    </feature-hook>
   </hooks>
 </extension>
 
