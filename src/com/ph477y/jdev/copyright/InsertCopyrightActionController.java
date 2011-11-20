@@ -7,12 +7,14 @@ import oracle.ide.controller.IdeAction;
 import oracle.ide.extension.RegisteredByExtension;
 
 import oracle.ide.model.Element;
+import oracle.ide.model.Node;
 import oracle.ide.model.TextNode;
 import oracle.ide.net.URLFileSystem;
 //import oracle.jdeveloper.model.JavaSourceNode;
 
 import java.util.ArrayList;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import oracle.ide.Ide;
@@ -52,6 +54,7 @@ public final class InsertCopyrightActionController
     {
       Element[] elements = context.getSelection();
 
+      List<TextNode> nodes = new ArrayList<TextNode>();
       for (Element elem: elements)
       {
         if (elem instanceof TextNode)
@@ -61,6 +64,7 @@ public final class InsertCopyrightActionController
           // create multiline blocks based on filetypes via suffix/extensions
           final String ext = URLFileSystem.getSuffix(node.getURL());
           LOG.info(INSERT_COPYRIGHT_CMD + " - " + ext);
+          nodes.add(node);
           // TODO: Call command here
           // command needs to
           // figure out proper multiline comments
@@ -68,16 +72,22 @@ public final class InsertCopyrightActionController
           // check out VCS
           // modify
           // end lock
-          
         }
+      }
+      AddCopyrightCommand addCmd = new AddCopyrightCommand(nodes);
+      try
+      {
+        addCmd.doit();
+      } catch (Exception e)
+      {
+        e.printStackTrace();
+        return false;
       }
       return true;
     }
-
     return false;
   }
 
-  @Override
   public Object getInvalidStateMessage(IdeAction ideAction, Context context)
   {
     return null;
