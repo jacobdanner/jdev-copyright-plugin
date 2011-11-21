@@ -109,21 +109,22 @@
   </trigger-hooks>
   <hooks>
     <jdeveloper-hook xmlns="http://xmlns.oracle.com/jdeveloper/1013/extension">
-      <!-- trying to make this context-menu-hook
-      <context-menu-listeners>
-        <site idref="navigator">
-          <listener-class>com.ph477y.jdev.copyright.InsertCopyrightContextListener</listener-class>
-        </site>
-      </context-menu-listeners>
-      -->
     </jdeveloper-hook>
+    <!-- TODO: re-add this once I can figure out why Update Center can't read/downloa bundle
+    <update-hook xmlns="http://xmlns.oracle.com/ide/update-hook">      
+      <update-center id="jacob.danner.jdev.plugins">
+        <name>Jacob's JDev Extensions</name>
+        <url>http://raw.github.com/jacobdanner/jdev-copyright-plugin/master/center.xml</url>
+      </update-center>
+    </update-hook>
+    -->
     <feature-hook>
       <description>Inserts user defined copyright/license info to the top of TextNodes</description>
-      <copyright>2011 </copyright>
-      <!--<iconpath></iconpath>-->
-      <license>Apache License</license>
-      <optional>false</optional>
+      <copyright>2011 - Jacob Danner - jacob.danner@gmail.com</copyright>
+      <license>BSD-2 Style</license>
+      <optional>true</optional>
     </feature-hook>
+    
   </hooks>
 </extension>
 
