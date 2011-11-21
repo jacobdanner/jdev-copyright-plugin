@@ -1,4 +1,18 @@
-<?xml version="1.0" encoding="windows-1252" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
+<updates version="1.0"
+         xmlns="http://xmlns.oracle.com/jdeveloper/updatecenter"
+         xmlns:u="http://xmlns.oracle.com/jdeveloper/update">
+  <u:update id="com.ph477y.jdev.copyright">
+    <u:name>copyright-plugin</u:name>
+    <u:version>1.0.0</u:version>
+    <u:author>Jacob Danner</u:author>
+    <u:author-url>http://github.com/jacobdanner/jdev-copyright-plugin</u:author-url>
+    <u:description>Inserts a copyright header into selected TextNodes</u:description>
+    <u:bundle-url>https://github.com/jacobdanner/jdev-copyright-plugin/raw/master/com.ph477y.jdev.copyright_bundle.zip</u:bundle-url>
+  </u:update>
+</updates>
+
+
 <!--
   ~ Copyright (c) 2011, Jacob Danner - jacob.danner@gmail.com
   ~ All rights reserved.
@@ -25,15 +39,3 @@
   ~ http://www.opensource.org/licenses/BSD-2-Clause
   -->
 
-<updates version="1.0"
-         xmlns="http://xmlns.oracle.com/jdeveloper/updatecenter"
-         xmlns:u="http://xmlns.oracle.com/jdeveloper/update">
-  <u:update id="com.ph477y.jdev.copyright">
-    <u:name>copyright-plugin</u:name>
-    <u:version>1.0.0</u:version>
-    <u:author>Jacob Danner</u:author>
-    <u:author-url>http://github.com/jacobdanner/jdev-copyright-plugin</u:author-url>
-    <u:description>Inserts a copyright header into selected TextNodes</u:description>
-    <u:bundle-url>https://github.com/jacobdanner/jdev-copyright-plugin/raw/master/com.ph477y.jdev.copyright_bundle.zip</u:bundle-url>
-  </u:update>
-</updates>
