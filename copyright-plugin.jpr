@@ -29,12 +29,28 @@
    </hash>
    <hash n="oracle.ide.model.ResourcePaths">
       <hash n="resourcesContentSet">
-         <list n="pattern-filters">
-            <string v="+etc/"/>
+         <list n="constituent-sets">
+            <hash>
+               <list n="pattern-filters">
+                  <string v="+etc/"/>
+                  <string v="+center.xml"/>
+                  <string v="+com.ph477y.jdev.copyright.jar"/>
+                  <string v="+README"/>
+               </list>
+               <list n="url-path">
+                  <url path="."/>
+               </list>
+            </hash>
+            <hash>
+               <list n="pattern-filters">
+                  <string v="+**"/>
+               </list>
+               <list n="url-path">
+                  <url path="META-INF/"/>
+               </list>
+            </hash>
          </list>
-         <list n="url-path">
-            <url path="."/>
-         </list>
+         <list n="url-path"/>
       </hash>
    </hash>
    <hash n="oracle.ide.model.TechnologyScopeConfiguration">
@@ -61,12 +77,102 @@
    </hash>
    <hash n="oracle.jdeveloper.deploy.dt.DeploymentProfiles">
       <hash n="profileDefinitions">
+         <hash n="check_for_updates_bundle">
+            <hash n="archiveOptions">
+               <value n="hasManifest" v="false"/>
+            </hash>
+            <hash n="dependencies">
+               <list n="dependencyList"/>
+            </hash>
+            <hash n="fileGroups">
+               <list n="groups">
+                  <hash>
+                     <list n="contributors">
+                        <hash>
+                           <url n="location" path="."/>
+                           <value n="type" v="1"/>
+                        </hash>
+                     </list>
+                     <value n="displayName" v="extensionJar"/>
+                     <hash n="filters">
+                        <list n="rules">
+                           <hash>
+                              <value n="pattern" v="check_for_updates_bundle.jar"/>
+                              <value n="type" v="1"/>
+                           </hash>
+                           <hash>
+                              <value n="pattern" v="META-INF/bundle.xml"/>
+                              <value n="type" v="1"/>
+                           </hash>
+                           <hash>
+                              <value n="pattern" v="META-INF/LICENSE.txt"/>
+                              <value n="type" v="1"/>
+                           </hash>
+                           <hash>
+                              <value n="pattern" v="copyright-plugin.jpr"/>
+                              <value n="type" v="1"/>
+                           </hash>
+                           <hash>
+                              <value n="pattern" v="copyright-plugin.iml"/>
+                              <value n="type" v="1"/>
+                           </hash>
+                           <hash>
+                              <value n="pattern" v="com.ph477y.jdev.copyright.jar2"/>
+                              <value n="type" v="1"/>
+                           </hash>
+                           <hash>
+                              <value n="pattern" v="center.xml"/>
+                              <value n="type" v="1"/>
+                           </hash>
+                           <hash>
+                              <value n="pattern" v="src/"/>
+                              <value n="type" v="1"/>
+                           </hash>
+                           <hash>
+                              <value n="pattern" v=".git/"/>
+                              <value n="type" v="1"/>
+                           </hash>
+                           <hash>
+                              <value n="DefaultFilters" v=""/>
+                           </hash>
+                        </list>
+                     </hash>
+                     <value n="type" v="1"/>
+                  </hash>
+                  <hash>
+                     <list n="contributors">
+                        <hash>
+                           <url n="location" path="META-INF/"/>
+                           <value n="type" v="1"/>
+                        </hash>
+                     </list>
+                     <value n="displayName" v="META"/>
+                     <hash n="filters">
+                        <list n="rules">
+                           <hash>
+                              <value n="DefaultFilters" v=""/>
+                           </hash>
+                        </list>
+                     </hash>
+                     <value n="targetWithinJar" v="META-INF"/>
+                     <value n="type" v="1"/>
+                  </hash>
+               </list>
+            </hash>
+            <url n="jarURL" path="com.ph477y.jdev.copyright_bundle.zip"/>
+            <hash n="libraryDependencies">
+               <value n="IncludeLibrariesFromOtherContainers" v="true"/>
+            </hash>
+            <value n="profileClass" v="oracle.jdeveloper.deploy.jar.ArchiveProfile"/>
+            <value n="profileName" v="check_for_updates_bundle"/>
+         </hash>
          <hash n="edtExtensionProfile">
             <hash n="archiveOptions">
                <list n="additionalManifests">
                   <url path="src/META-INF/MANIFEST.MF"/>
                </list>
                <value n="bundleManifestVersion" v="2.0.0"/>
+               <value n="bundleName" v="com.ph477y.jdev.copyright"/>
                <value n="bundleSymbolicName" v="com.ph477y.jdev.copyright"/>
                <value n="bundleVersion" v="1.0.0"/>
                <value n="hasManifest" v="true"/>
@@ -111,6 +217,10 @@
                      <value n="type" v="1"/>
                   </hash>
                </list>
+            </hash>
+            <hash n="importDefinition">
+               <hash n="contributors"/>
+               <hash n="rules"/>
             </hash>
             <url n="jarURL" path="../../../../Oracle/Middleware/jdeveloper/jdev/extensions/com.ph477y.jdev.copyright.jar"/>
             <hash n="libraryDependencies">
@@ -176,7 +286,7 @@
                <hash n="contributors"/>
                <hash n="rules"/>
             </hash>
-            <url n="jarURL" path="../../jdeveloper/jdev/extensions/com.ph477y.jdev.copyright.jar"/>
+            <url n="jarURL" path="com.ph477y.jdev.copyright.jar"/>
             <hash n="libraryDependencies">
                <value n="IncludeLibrariesFromOtherContainers" v="true"/>
             </hash>
@@ -198,8 +308,9 @@
          </hash>
       </hash>
       <list n="profileList">
-         <string v="Extension_Deployment"/>
+         <string v="check_for_updates_bundle"/>
          <string v="edtExtensionProfile"/>
+         <string v="Extension_Deployment"/>
       </list>
    </hash>
    <hash n="oracle.jdeveloper.model.J2eeSettings">

@@ -1,17 +1,12 @@
 package com.ph477y.jdev.copyright;
 
-//import oracle.bali.xml.addin.XMLSourceNode;
 import oracle.ide.Context;
 import oracle.ide.controller.Controller;
 import oracle.ide.controller.IdeAction;
 import oracle.ide.extension.RegisteredByExtension;
 
 import oracle.ide.model.Element;
-import oracle.ide.model.Node;
 import oracle.ide.model.TextNode;
-import oracle.ide.net.URLFileSystem;
-//import oracle.jdeveloper.model.JavaSourceNode;
-
 import java.util.ArrayList;
 
 import java.util.List;
@@ -20,13 +15,8 @@ import java.util.logging.Logger;
 import oracle.ide.Ide;
 import oracle.ide.controller.TriggerController;
 
-import oracle.javatools.editor.language.LanguageSupport;
 
-
-/**
- * Controller for action com.ph477y.jdev.InsertCopyrightActionId
- */
-@RegisteredByExtension("com.ph477y.jdev")
+@RegisteredByExtension("com.ph477y.jdev.copyright")
 public final class InsertCopyrightActionController
   implements TriggerController
 {
@@ -60,20 +50,10 @@ public final class InsertCopyrightActionController
         if (elem instanceof TextNode)
         {
           TextNode node = (TextNode) elem;
-          // it looks like the best way to handle this is to
-          // create multiline blocks based on filetypes via suffix/extensions
-          final String ext = URLFileSystem.getSuffix(node.getURL());
-          LOG.info(INSERT_COPYRIGHT_CMD + " - " + ext);
           nodes.add(node);
-          // TODO: Call command here
-          // command needs to
-          // figure out proper multiline comments
-          // acquire lock
-          // check out VCS
-          // modify
-          // end lock
         }
       }
+
       AddCopyrightCommand addCmd = new AddCopyrightCommand(nodes, context);
       try
       {
@@ -93,41 +73,3 @@ public final class InsertCopyrightActionController
     return null;
   }
 }
-// SCRATCHPAD FOR LATER
-  /*    //  BasicEditorKit.ToggleCommentsAction
-      // Before we start the edit, fetch the document's single-line
-      // comment starter (if any)
-      /*LanguageSupport support = document.getLanguageSupport();
-      String commentDelimiter = (String)
-        support.getProperty( LanguageSupport.PROPERTY_LINE_COMMENT_START );
-      if ( ( commentDelimiter == null ) ||
-           ( commentDelimiter.length() == 0 ) )
-      {
-        return;
-      }
-        // TODO look in languageModule for supported info
-        if(XML_FILETYPES.contains(ext))
-        {
-          // Handle XML files
-          // check for <? line then add
-          //<!-- license txt -->
-        //} else if (JAVA_FILETYPE.contains(ext))
-        //{
-          // \/\*\*
-          // \*\/
-        //} else if (JSP_FILETYPE.contains(ext))
-        //{
-          // <%-- comment --%>
-        //} else {
-          // add
-          // # Unknown File Type - please correct commenting of license text
-          // <LICENSE_TXT>
-        }
-      //}
-      //else
-      //{
-        // cannot handle type elem.class.getName();
-      //}
-    //}
-    return false;
-  */

@@ -17,9 +17,6 @@ import java.awt.GridBagLayout;
 
 import java.net.URL;
 
-/**
- * Copyright preference page implementation.
- */
 @RegisteredByExtension("com.ph477y.jdev.copyright")
 final class CopyrightPanel
   extends DefaultTraversablePanel implements ApplyListener

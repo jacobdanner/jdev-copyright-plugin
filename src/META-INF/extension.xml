@@ -1,4 +1,6 @@
-<extension id="com.ph477y.jdev.copyright" version="1.0.0" esdk-version="1.0" rsbundle-class="com.ph477y.jdev.Res"
+<?xml version="1.0"?>
+<extension id="com.ph477y.jdev.copyright" version="1.0.0" esdk-version="1.0"
+           rsbundle-class="com.ph477y.jdev.Res"
            xmlns="http://jcp.org/jsr/198/extension-manifest">
   <name>${EXTENSION_NAME}</name>
   <owner>${EXTENSION_OWNER}</owner>
@@ -21,6 +23,9 @@
     <import>oracle.vcs-extended</import>
     <import>oracle.ide.webbrowser</import>
     <import>oracle.ide.audit</import>
+    <import>oracle.ide.externaltools</import>
+    <import>oracle.ide.audit.core</import>
+    <import>oracle.jdeveloper.java.core</import>
   </dependencies>
   <required-bundles>
     <bundle>oracle.icons</bundle>
@@ -37,6 +42,7 @@
     <bundle>oracle.xmlef</bundle>
     <bundle>oracle.xmlef-core</bundle>
     <bundle>oracle.xmlef-swing</bundle>
+    <bundle>oracle.javatools-jdk</bundle>
   </required-bundles>
   <trigger-hooks xmlns="http://xmlns.oracle.com/ide/extension">
     <rules>
@@ -90,15 +96,26 @@
           <tooltip>Configure Copyright Information</tooltip>
         </page>
       </settings-ui-hook>
+      <context-menu-hook rule="can-apply-license-to-text">
+        <site idref="navigator"/>
+        <menu>
+          <section id="copyright-plugin-section"
+            xmlns="http://jcp.org/jsr/198/extension-manifest">
+            <item action-ref="com.ph477y.jdev.InsertCopyrightActionId" weight="1.0"/>
+          </section>
+        </menu>
+      </context-menu-hook>
     </triggers>
   </trigger-hooks>
   <hooks>
     <jdeveloper-hook xmlns="http://xmlns.oracle.com/jdeveloper/1013/extension">
+      <!-- trying to make this context-menu-hook
       <context-menu-listeners>
         <site idref="navigator">
           <listener-class>com.ph477y.jdev.copyright.InsertCopyrightContextListener</listener-class>
         </site>
       </context-menu-listeners>
+      -->
     </jdeveloper-hook>
     <feature-hook>
       <description>Inserts user defined copyright/license info to the top of TextNodes</description>

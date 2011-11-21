@@ -6,10 +6,7 @@ import oracle.javatools.data.HashStructure;
 import oracle.javatools.data.HashStructureAdapter;
 import oracle.javatools.data.PropertyStorage;
 
-/**
- * <tt>CopyrightInfo</tt> data object.
- */
-@RegisteredByExtension("com.ph477y.jdev")
+@RegisteredByExtension("com.ph477y.jdev.copyright")
 public final class CopyrightInfo
   extends HashStructureAdapter
 {
@@ -40,7 +37,7 @@ public final class CopyrightInfo
 
   public void setCopyright(String txt)
   {
-    _hash.putString(COPYRIGHT_TXT, txt);
+    _hash.putString(COPYRIGHT_TXT, txt.trim());
   }
 
 }
