@@ -6,7 +6,7 @@
     <u:name>copyright-plugin</u:name>
     <u:version>1.0.0</u:version>
     <u:author>Jacob Danner</u:author>
-    <u:author-url>http://jacobdanner.github.com/jdev-copyright-plugin</u:author-url>
+    <u:author-url>http://github.com/jacobdanner/jdev-copyright-plugin</u:author-url>
     <u:description>Inserts a copyright header into selected TextNodes</u:description>
     <u:bundle-url>https://raw.github.com/jacobdanner/jdev-copyright-plugin/master/com.ph477y.jdev.copyright_bundle.zip</u:bundle-url>
   </u:update>

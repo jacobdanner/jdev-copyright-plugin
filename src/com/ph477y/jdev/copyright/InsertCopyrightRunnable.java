@@ -37,12 +37,15 @@ import oracle.ide.model.TextNode;
 import oracle.ide.net.URLFileSystem;
 import oracle.ide.net.URLKey;
 import oracle.ide.vcs.VCSManager;
+
 import oracle.javatools.buffer.TextBuffer;
 import oracle.javatools.editor.language.LanguageModule;
+
 import oracle.jdeveloper.audit.transform.TextBufferCommand;
 import oracle.jdeveloper.vcs.spi.VCSCheckOutNodeCmd;
 
 import java.net.URL;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -51,7 +54,9 @@ import java.util.List;
  *
  * @author jacob.danner@gmail.com
  */
-public class InsertCopyrightRunnable extends VCSCheckOutNodeCmd implements Runnable
+public class InsertCopyrightRunnable
+  extends VCSCheckOutNodeCmd
+  implements Runnable
 {
   private List<TextNode> nodes;
   private String copyrightTxt;
@@ -82,41 +87,29 @@ public class InsertCopyrightRunnable extends VCSCheckOutNodeCmd implements Runna
    */
   private void initExtensions()
   {
-    String[] slashStarExt = new String[]{LanguageModule.FILETYPE_C,
-      LanguageModule.FILETYPE_CPLUSPLUS,
-      LanguageModule.FILETYPE_CPP,
-      LanguageModule.FILETYPE_CPP2,
-      LanguageModule.FILETYPE_H,
-      LanguageModule.FILETYPE_JAVA,
-      LanguageModule.FILETYPE_JS,
-      LanguageModule.FILETYPE_CSS,
-      LanguageModule.FILETYPE_PHP,
-      LanguageModule.FILETYPE_PHP3,
-      LanguageModule.FILETYPE_PHP4,
-      LanguageModule.FILETYPE_PLSQL,
-      LanguageModule.FILETYPE_SQL,
-      LanguageModule.FILETYPE_SQLJ,
-      LanguageModule.FILETYPE_IDL,
-      "ml",
-      "cs"};
+    String[] slashStarExt = new String[]
+      { LanguageModule.FILETYPE_C, LanguageModule.FILETYPE_CPLUSPLUS, LanguageModule.FILETYPE_CPP,
+        LanguageModule.FILETYPE_CPP2, LanguageModule.FILETYPE_H, LanguageModule.FILETYPE_JAVA,
+        LanguageModule.FILETYPE_JS, LanguageModule.FILETYPE_CSS, LanguageModule.FILETYPE_PHP,
+        LanguageModule.FILETYPE_PHP3, LanguageModule.FILETYPE_PHP4, LanguageModule.FILETYPE_PLSQL,
+        LanguageModule.FILETYPE_SQL, LanguageModule.FILETYPE_SQLJ, LanguageModule.FILETYPE_IDL, "ml", "cs" };
     slashStarList = Arrays.asList(slashStarExt);
 
     //<%-- -->
     // JSPSourceNode
     // TODO: is jspx valid here
-    String[] jspExt = new String[]{LanguageModule.FILETYPE_JSP};//, "jspx"};
+    String[] jspExt = new String[]
+      { LanguageModule.FILETYPE_JSP }; //, "jspx"};
     jspExtList = Arrays.asList(jspExt);
 
     // rb can have multiple line using =begin/=end
-    String[] rbExt = new String[]{"rb", "erb", "rhtml"};
+    String[] rbExt = new String[]
+      { "rb", "erb", "rhtml" };
     rbExtList = Arrays.asList(rbExt);
 
-    String[] singleHashExt = new String[]{LanguageModule.FILETYPE_TXT,
-      LanguageModule.FILETYPE_TEXT,
-      LanguageModule.FILETYPE_RTS,
-      LanguageModule.FILETYPE_PROPERTIES,
-      LanguageModule.FILETYPE_LOG,
-      "py", "sh", "properties"};
+    String[] singleHashExt = new String[]
+      { LanguageModule.FILETYPE_TXT, LanguageModule.FILETYPE_TEXT, LanguageModule.FILETYPE_RTS,
+        LanguageModule.FILETYPE_PROPERTIES, LanguageModule.FILETYPE_LOG, "py", "sh", "properties" };
     hashExtList = Arrays.asList(singleHashExt);
 
     // : <- IDL File
@@ -124,7 +117,8 @@ public class InsertCopyrightRunnable extends VCSCheckOutNodeCmd implements Runna
     //colonExtList = Arrays.asList(singleLineColonExt);
 
     // REM <- BATCH File
-    String[] windowsShellExt = new String[]{"bat", "cmd"};
+    String[] windowsShellExt = new String[]
+      { "bat", "cmd" };
     winExtList = Arrays.asList(windowsShellExt);
   }
 
@@ -160,57 +154,44 @@ public class InsertCopyrightRunnable extends VCSCheckOutNodeCmd implements Runna
         if (!progressBar.hasUserCancelled())
         {
           TextNode node = nodes.get(i);
-          final URLKey nodeUrl = URLKey.getInstance(node.getURL());
-          boolean canCheckout = VCSManager.getVCSManager().canCheckOut(nodeUrl.toURL());//true;//;//canCheckOutUI(nodeUrl.toURL());
-          boolean doesCheckout = true; // assume true so we can process the file, unless doCheckout returns false
+          // gdavison says this is they way to unset readonly and perform VCS operations
+          final URL nodeUrl = node.getURL();
+          URLFileSystem.setReadOnly(nodeUrl, false);
 
-          // Need to figure out the proper way to call these APIs, canCheckoutUI always prompts
-          // maybe we should try
-          // oracle.jdeveloper.refactoring.util.MakeWritableHelper
-          logMessage(i, node, "Checking VCS of " + node.getShortLabel());
-          if (canCheckout)
+          final String toinsertTxt = getCopyrightForInsert(nodeUrl, node);
+          try
           {
-            try
+            // for most cases, 0 is fine, but if XML starts with <? ... we should go to the next line
+            // this is simpler than actually verifying via xml apis
+            int offset = 0;
+            String suffix = URLFileSystem.getSuffix(nodeUrl);
+            if (!suffix.isEmpty() && FileTypesRecognizer.isXmlExtension(suffix))
             {
-              doesCheckout = doCheckOut(nodeUrl.toURL());
-            } catch (Exception e)
-            {
-              doesCheckout = false;
-              e.printStackTrace();
-            }
-          }
-          if (doesCheckout)
-          {
-            logMessage(i, node, "VCS Check complete " + doesCheckout + " " + node.getShortLabel());
-            final String toinsertTxt = getCopyrightForInsert(nodeUrl.toURL(), node);
-            try
-            {
-              int offset = 0; // for most cases, 0 is fine, but if XML starts with <? ... we should go to the next line
-              String suffix = URLFileSystem.getSuffix(nodeUrl.toURL());
-              if (!suffix.isEmpty() && FileTypesRecognizer.isXmlExtension(suffix))
+              TextBuffer tb = node.tryAcquireTextBuffer();
+              tb.readLock();
+              String firstLine = tb.getString(0, 5);
+              // <?xml
+              if (firstLine.compareToIgnoreCase("<?xml") == 0)
               {
-                TextBuffer tb = node.tryAcquireTextBuffer();
-                tb.readLock();
-                String firstLine = tb.getString(0, 5);
-                // <?xml
-                if (firstLine.compareToIgnoreCase("<?xml") == 0)
-                {
-                  offset = tb.getLineMap().getLineStartOffset(1);
-                }
-                tb.readUnlock();
+                offset = tb.getLineMap().getLineStartOffset(1);
               }
-              TextBufferCommand insertCommand = new TextBufferCommand("Inserting Copyright", node.acquireTextBufferOrThrow());
-              insertCommand.insert(offset, toinsertTxt);
-              insertCommand.doit();
-            } catch (Exception ioEx)
-            {
-              logMessage(i, node, "Failed to add copyright");
+              tb.readUnlock();
             }
+            TextBufferCommand insertCommand =
+              new TextBufferCommand("Inserting Copyright", node.acquireTextBufferOrThrow());
+            insertCommand.insert(offset, toinsertTxt);
+            insertCommand.doit();
+          }
+          catch (Exception ioEx)
+          {
+            logMessage(i, node, "Failed to add copyright");
           }
         }
+
       }
 
-    } finally
+    }
+    finally
     {
       progressBar.setDoneStatus();
     }
@@ -224,7 +205,7 @@ public class InsertCopyrightRunnable extends VCSCheckOutNodeCmd implements Runna
 
     String className = "";
     boolean isXmlNode = false;
-    if(!ext.isEmpty())
+    if (!ext.isEmpty())
     {
       className = FileTypesRecognizer.getClassNameForExtension(ext);
       isXmlNode = FileTypesRecognizer.isXmlExtension(ext);
@@ -303,12 +284,12 @@ public class InsertCopyrightRunnable extends VCSCheckOutNodeCmd implements Runna
     // TextBuffer.EOL_* values here instead?
     final String[] cpLines = copyright.toString().split("\n");
     StringBuilder copyTxt = new StringBuilder();
-    for (String line : cpLines)
+    for (String line: cpLines)
     {
       copyTxt.append(prependChar);
       copyTxt.append(" ");
       copyTxt.append(line);
-      if(!line.endsWith("\n"))
+      if (!line.endsWith("\n"))
       {
         copyTxt.append("\n");
       }
