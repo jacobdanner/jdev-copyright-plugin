@@ -1,5 +1,6 @@
 This is an attempt to provide similar functionality to [Intellij's Copyright Plugin][intellij] from within JDeveloper.
 
+
 ## Installation
 Download the [Bundle Jar][bundlejar]
 Go to Help -> Check for Update -> Install from Local File
@@ -15,8 +16,9 @@ It's pretty simple once its installed
   b. Select Insert Copyright
 That's it :)
 
-You can read more in the [blog post][blog_post]
+You can read more on the [website][website]
 
+[website]: http://jacobdanner.github.com/jdev-copyright-plugin "Main Website"
 [intellij]:http://www.jetbrains.com/idea/webhelp/generating-and-updating-copyright-notice.html       "Intellij's Copyright Plugin"
 [bundlejar]: https://github.com/jacobdanner/jdev-copyright-plugin/blob/master/com.ph477y.jdev.copyright_bundle.zip?raw=true "bundle jar"
 [blog_post]: http://g33kd0m.ph477y.com/2011/11/jdeveloper-copyright-plugin.html    "blog post"
